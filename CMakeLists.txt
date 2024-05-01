@@ -25,8 +25,18 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 include_directories(src/include)
-add_executable(BacktestEngine src/Main.cpp)
-add_executable(BacktestEngineTest src/Engine.cpp test/MainTest.cpp)
+add_executable(BacktestEngine 
+  src/Main.cpp 
+  src/Engine.cpp 
+  src/BarTypes.cpp 
+  src/DataReader.cpp
+  src/PriceSeries.cpp)
+add_executable(BacktestEngineTest 
+  src/Engine.cpp 
+  src/BarTypes.cpp 
+  src/DataReader.cpp 
+  src/PriceSeries.cpp
+  test/MainTest.cpp)
 target_link_libraries(BacktestEngineTest GTest::gtest_main)
 include(GoogleTest)
 gtest_discover_tests(BacktestEngineTest)

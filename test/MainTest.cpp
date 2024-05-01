@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
-#include <Engine.hpp>
+#include "Engine.hpp"
+#include "BarTypes.hpp"
+#include "PriceSeries.hpp"
 
 TEST(EngineTest, BasicAssertion){
     EXPECT_STRNE("Hello","World");
