@@ -4,13 +4,13 @@
 
 class Bar{
 public:
-    time_t time;
+    uint32_t time;
     float open;
     float high;
     float low;
     float close;
 
-    Bar(time_t time, float open, float high, float low, float close);
+    Bar(uint32_t time, float open, float high, float low, float close);
 
     virtual bool operator==(const Bar& rhs) const;
 };
@@ -21,7 +21,7 @@ public:
     uint32_t vol;
     uint32_t spread;
 
-    Mt5Bar(time_t time, float open, float high, float low, float close,
+    Mt5Bar(uint32_t time, float open, float high, float low, float close,
         uint32_t tickvol, uint32_t vol, uint32_t spread);
 
     virtual bool operator==(const Mt5Bar& rhs) const;

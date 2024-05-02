@@ -3,7 +3,8 @@
 
 #include <cmath>
 
-bool compareFloats(const float A, const float B, const float epsilon = 0.00000001){
+template <typename T>
+bool compareFloats(const T A, const T B, const T epsilon = 0.00000001){
     return fabs(A-B)<epsilon;
 }
 
