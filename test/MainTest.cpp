@@ -10,7 +10,7 @@ TEST(EngineTest, BasicAssertion){
 
 TEST(EngineTest, CanBuildBarCorrectly){
     Bar bar1 = Bar(1,1,1,1,1);
-    EXPECT_EQ(bar1.time,1);
+    EXPECT_EQ(bar1.timePoint,1);
     EXPECT_EQ(bar1.open,1);
     EXPECT_EQ(bar1.high,1);
     EXPECT_EQ(bar1.low,1);
@@ -19,7 +19,7 @@ TEST(EngineTest, CanBuildBarCorrectly){
 
 TEST(EngineTest, CanBuildMt5BarCorrectly){
     Mt5Bar bar1 = Mt5Bar(1,1,1,1,1,1,1,1);
-    EXPECT_EQ(bar1.time,1);
+    EXPECT_EQ(bar1.timePoint,1);
     EXPECT_EQ(bar1.open,1);
     EXPECT_EQ(bar1.high,1);
     EXPECT_EQ(bar1.low,1);

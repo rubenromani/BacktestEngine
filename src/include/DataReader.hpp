@@ -38,7 +38,7 @@ template<>
 Bar DataReader<Bar>::getBarFromLine(std::string line)
 {
     std::string tmp;
-    uint32_t time;
+    uint32_t timePoint;
     float open;
     float high;
     float low;
@@ -47,7 +47,7 @@ Bar DataReader<Bar>::getBarFromLine(std::string line)
     std::stringstream inputString(line);
     tmp="";
     getline(inputString, tmp, ',');
-    time = std::stoul(tmp,nullptr);
+    timePoint = std::stoul(tmp,nullptr);
     tmp="";
     getline(inputString, tmp, ',');
     open = std::stof(tmp,nullptr);
@@ -61,14 +61,14 @@ Bar DataReader<Bar>::getBarFromLine(std::string line)
     getline(inputString, tmp);
     close = std::stof(tmp,nullptr);
     
-    return Bar(time,open,high,low,close);
+    return Bar(timePoint,open,high,low,close);
 }
 
 template<>
 Mt5Bar DataReader<Mt5Bar>::getBarFromLine(std::string line)
 {
     std::string tmp;
-    uint32_t time;
+    uint32_t timePoint;
     float open;
     float high;
     float low;
@@ -80,7 +80,7 @@ Mt5Bar DataReader<Mt5Bar>::getBarFromLine(std::string line)
     
     tmp="";
     getline(inputString, tmp, ',');
-    time = std::stoul(tmp,nullptr);
+    timePoint = std::stoul(tmp,nullptr);
     getline(inputString, tmp, ',');
     open = std::stof(tmp,nullptr);
     tmp="";
@@ -101,7 +101,7 @@ Mt5Bar DataReader<Mt5Bar>::getBarFromLine(std::string line)
     tmp="";
     getline(inputString, tmp);
     spread = std::stoul(tmp,nullptr);
-    return Mt5Bar(time,open,high,low,close,tickvol,vol,spread);
+    return Mt5Bar(timePoint,open,high,low,close,tickvol,vol,spread);
 }
 
 
