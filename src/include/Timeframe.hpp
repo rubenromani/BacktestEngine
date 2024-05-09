@@ -1,5 +1,6 @@
 #ifndef TIMEFRAME_HPP
 #define TIMEFRAME_HPP
+#include <cstdint>
 
 typedef enum {
     MINUTE_1,
@@ -16,4 +17,7 @@ typedef enum {
 
 bool checkTimeframeCompatibility(timeframe_e from, timeframe_e to);
 
+uint32_t intervalToSeconds(timeframe_e timeframe);
+uint8_t getNumValue(timeframe_e timeframe_e);
+ 
 #endif /* TIMEFRAME_HPP */
