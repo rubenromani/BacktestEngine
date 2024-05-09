@@ -31,12 +31,14 @@ add_executable(BacktestEngine
   src/Engine.cpp 
   src/BarTypes.cpp 
   src/DataReader.cpp
-  src/PriceSeries.cpp)
+  src/PriceSeries.cpp
+  src/Timeframe.cpp)
 add_executable(BacktestEngineTest 
   src/Engine.cpp 
   src/BarTypes.cpp 
   src/DataReader.cpp 
   src/PriceSeries.cpp
+  src/Timeframe.cpp
   test/MainTest.cpp)
 target_link_libraries(BacktestEngineTest GTest::gtest_main)
 include(GoogleTest)
