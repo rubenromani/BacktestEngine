@@ -65,27 +65,30 @@ void timeframeConversionTest(){
     auto dataReader = DataReader<Mt5Bar>();
     auto priceSeries = dataReader.readFromFile(filepath);
     priceSeries.setTimeframe(MINUTE_1);
-    for(uint64_t i =0; i<4500; i++)
-    {
-        std::cout 
-        << "Index: " << i << "\t"
-        << "Year: " << priceSeries.at(i).time.tm_year + 1900 << " "
-        << "Month: " << priceSeries.at(i).time.tm_mon+1 << " "
-        << "Day: " << priceSeries.at(i).time.tm_mday << " "
-        << "Hour: " << priceSeries.at(i).time.tm_hour << " "
-        << "Min: " << priceSeries.at(i).time.tm_min << " "
-        << "Sec: " << priceSeries.at(i).time.tm_sec << " "
-        << std::endl;
-    }
+
+    std::function<void(Mt5Bar)> printBar = [](Mt5Bar bar){
+        bar.print();
+        if(!bar.intrabar.empty()){
+            for(auto& intra : bar.intrabar){
+                std::cout << "\t";
+                intra.print();
+            }
+        }
+    };
+
     auto newPriceSeriesm5 = priceSeries.convertToTimeframe(MINUTE_5);
-    auto newPriceSeriesm10 = priceSeries.convertToTimeframe(MINUTE_10);
-    auto newPriceSeriesm15 = priceSeries.convertToTimeframe(MINUTE_15);
-    auto newPriceSeriesm30 = priceSeries.convertToTimeframe(MINUTE_30);
-    auto newPriceSeriesh1 = priceSeries.convertToTimeframe(HOUR_1);
-    auto newPriceSeriesh4 = priceSeries.convertToTimeframe(HOUR_4);
-    auto newPriceSeriesd1 = priceSeries.convertToTimeframe(DAY_1);
-    auto newPriceSeriesw1 = priceSeries.convertToTimeframe(WEEK_1);
-    auto newPriceSeriesM1 = priceSeries.convertToTimeframe(MOUNTH_1);
+    for(int i=0; i<10; i++){
+        printBar(newPriceSeriesm5.at(i));
+    }
+
+    //auto newPriceSeriesm10 = priceSeries.convertToTimeframe(MINUTE_10);
+    //auto newPriceSeriesm15 = priceSeries.convertToTimeframe(MINUTE_15);
+    //auto newPriceSeriesm30 = priceSeries.convertToTimeframe(MINUTE_30);
+    //auto newPriceSeriesh1 = priceSeries.convertToTimeframe(HOUR_1);
+    //auto newPriceSeriesh4 = priceSeries.convertToTimeframe(HOUR_4);
+    //auto newPriceSeriesd1 = priceSeries.convertToTimeframe(DAY_1);
+    //auto newPriceSeriesw1 = priceSeries.convertToTimeframe(WEEK_1);
+    //auto newPriceSeriesM1 = priceSeries.convertToTimeframe(MOUNTH_1);
 }
 
 int main(){

@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <vector>
 #include <iostream>
+#include <numeric>
+#include <functional>
 #include "BarTypes.hpp"
 #include "Timeframe.hpp"
 
@@ -101,7 +103,62 @@ public:
             break;
         }
 
-        std::cout << startIdx << std::endl;
+        // GetNewBar
+        uint32_t intervalSec = intervalToSeconds(timeframe);
+        uint32_t endIdx = 0;
+
+        std::function<T(std::vector<T>&,uint32_t,uint32_t)> getNewBar =
+            [&](std::vector<T>& series, uint32_t startIdx, uint32_t endIdx) -> T {
+
+                typename std::vector<T>::iterator startIt = series.begin() + startIdx;
+                typename std::vector<T>::iterator endIt = series.begin() + endIdx;
+                typename std::vector<T> intrabar{};
+
+                if(timeframe_==timeframe_e::MINUTE_1){
+                    for(auto it=startIt; it!=endIt; it++){
+                        intrabar.push_back(*it);
+                    }
+                }
+
+                if constexpr(std::is_same<T, Bar>::value){
+                    return T(
+                        (*startIt).timePoint,
+                        (*startIt).open,
+                        (*std::max_element(startIt,endIt,[](T a, T b){
+                            return a.high < b.high;
+                        })).high,
+                        (*std::max_element(startIt,endIt,[](T a, T b){
+                            return a.low < b.low;
+                        })).low,
+                        (*startIt).close,
+                        std::move(intrabar)
+                    );
+                } else {
+                    return T(
+                        (*startIt).timePoint,
+                        (*startIt).open,
+                        (*std::max_element(startIt,endIt,[](T a, T b){
+                            return a.high < b.high;
+                        })).high,
+                        (*std::max_element(startIt,endIt,[](T a, T b){
+                            return a.low < b.low;
+                        })).low,
+                        (*startIt).close,
+                        std::accumulate(startIt, endIt, 0, [](uint32_t i, T t){return i+t.tickvol;}),
+                        std::accumulate(startIt, endIt, 0, [](uint32_t i, T t){return i+t.vol;}),
+                        std::accumulate(startIt, endIt, 0, [](uint32_t i, T t){return i+t.spread;})/static_cast<int>((endIt-startIt)),
+                        std::move(intrabar)
+                    );
+                }
+
+            };
+        for(uint32_t i=startIdx; i<series_.size(); i++){
+            if(static_cast<time_t>(series_[i].timePoint) - static_cast<time_t>(series_[startIdx].timePoint) > intervalSec){
+                endIdx=i;
+                newSeries.push_back(getNewBar(series_,startIdx,endIdx));
+                startIdx=i;
+            }
+        }
 
         return PriceSeries<T>(std::move(newSeries),timeframe);
     }
