@@ -46,6 +46,16 @@ void Bar::print() const {
         << std::endl;
 }
 
+void Bar::printVerbose() const {
+    print();
+    if(!intrabar.empty()){
+        for(auto& intra : intrabar){
+            std::cout << "\t";
+            intra.print();
+        }
+    }
+}
+
 Mt5Bar::Mt5Bar(uint32_t timePoint, float open, float high, float low, float close,
     uint32_t tickvol, uint32_t vol, uint32_t spread)
     : Bar{timePoint,open,high,low,close}, tickvol{tickvol}, vol{vol}, spread{spread}{}

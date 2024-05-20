@@ -18,6 +18,7 @@ public:
     virtual float range() const;
     virtual bool operator==(const Bar& rhs) const;
     virtual void print() const;
+    virtual void printVerbose() const;
 
 private:
     virtual void timePointToTime();

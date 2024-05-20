@@ -65,21 +65,23 @@ void timeframeConversionTest(){
     auto dataReader = DataReader<Mt5Bar>();
     auto priceSeries = dataReader.readFromFile(filepath);
     priceSeries.setTimeframe(MINUTE_1);
-
-    std::function<void(Mt5Bar)> printBar = [](Mt5Bar bar){
-        bar.print();
-        if(!bar.intrabar.empty()){
-            for(auto& intra : bar.intrabar){
-                std::cout << "\t";
-                intra.print();
-            }
-        }
-    };
-
-    auto newPriceSeriesm5 = priceSeries.convertToTimeframe(MINUTE_5);
+    auto newPriceSeriesM5 = priceSeries.convertToTimeframe(MINUTE_5);
+    /*
     for(int i=0; i<10; i++){
-        printBar(newPriceSeriesm5.at(i));
+        newPriceSeriesM5.at(i).printVerbose();
     }
+    */
+    filepath = "../data/EURUSD_M5_pars.csv";
+    auto originalPriceSeriesM5 = dataReader.readFromFile(filepath);
+    const auto & originalPriceSeriesM5Series = originalPriceSeriesM5.series();
+    const auto & newPriceSeriesM5Series = newPriceSeriesM5.series();
+    auto originalPriceSeriesM5SeriesIt = originalPriceSeriesM5Series.begin();
+    auto newPriceSeriesM5SeriesIt = newPriceSeriesM5Series.begin();
+
+    // find starting point
+    while( (*(originalPriceSeriesM5SeriesIt++)).timePoint !=  (*newPriceSeriesM5SeriesIt).timePoint);
+    std::cout << (*originalPriceSeriesM5SeriesIt).timePoint << std::endl;
+
 
     //auto newPriceSeriesm10 = priceSeries.convertToTimeframe(MINUTE_10);
     //auto newPriceSeriesm15 = priceSeries.convertToTimeframe(MINUTE_15);

@@ -115,7 +115,7 @@ public:
                 typename std::vector<T> intrabar{};
 
                 if(timeframe_==timeframe_e::MINUTE_1){
-                    for(auto it=startIt; it!=endIt; it++){
+                    for(auto it=startIt; it<endIt; it++){
                         intrabar.push_back(*it);
                     }
                 }
@@ -127,10 +127,10 @@ public:
                         (*std::max_element(startIt,endIt,[](T a, T b){
                             return a.high < b.high;
                         })).high,
-                        (*std::max_element(startIt,endIt,[](T a, T b){
+                        (*std::min_element(startIt,endIt,[](T a, T b){
                             return a.low < b.low;
                         })).low,
-                        (*startIt).close,
+                        (*(endIt-1)).close,
                         std::move(intrabar)
                     );
                 } else {
@@ -140,10 +140,10 @@ public:
                         (*std::max_element(startIt,endIt,[](T a, T b){
                             return a.high < b.high;
                         })).high,
-                        (*std::max_element(startIt,endIt,[](T a, T b){
+                        (*std::min_element(startIt,endIt,[](T a, T b){
                             return a.low < b.low;
                         })).low,
-                        (*startIt).close,
+                        (*(endIt-1)).close,
                         std::accumulate(startIt, endIt, 0, [](uint32_t i, T t){return i+t.tickvol;}),
                         std::accumulate(startIt, endIt, 0, [](uint32_t i, T t){return i+t.vol;}),
                         std::accumulate(startIt, endIt, 0, [](uint32_t i, T t){return i+t.spread;})/static_cast<int>((endIt-startIt)),
@@ -152,8 +152,9 @@ public:
                 }
 
             };
+
         for(uint32_t i=startIdx; i<series_.size(); i++){
-            if(static_cast<time_t>(series_[i].timePoint) - static_cast<time_t>(series_[startIdx].timePoint) > intervalSec){
+            if(static_cast<time_t>(series_[i].timePoint) - static_cast<time_t>(series_[startIdx].timePoint) >= intervalSec){
                 endIdx=i;
                 newSeries.push_back(getNewBar(series_,startIdx,endIdx));
                 startIdx=i;
